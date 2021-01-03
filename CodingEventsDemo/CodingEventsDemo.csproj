@@ -8,9 +8,7 @@
 
 
   <ItemGroup>
-    <Folder Include="Views\Events\" />
     <Folder Include="Data\" />
-    <Folder Include="ViewModels\" />
     <Folder Include="Views\EventCategory\" />
   </ItemGroup>
   <ItemGroup>

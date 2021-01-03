@@ -2,7 +2,7 @@
 
 namespace CodingEventsDemo.Migrations
 {
-    public partial class ReleateEventsAndCategories : Migration
+    public partial class RelateEventsAndCategories : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
