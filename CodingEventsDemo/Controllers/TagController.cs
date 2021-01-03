@@ -2,6 +2,7 @@
 using CodingEventsDemo.Models;
 using CodingEventsDemo.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,18 +58,39 @@ namespace CodingEventsDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                EventTag eventTag = new EventTag
-                {
-                    EventId = viewModel.EventId,
-                    TagId = viewModel.TagId
-                };
-                context.EventTags.Add(eventTag);
-                context.SaveChanges();
+                int eventId = viewModel.EventId;
+                int tagId = viewModel.TagId;
 
+                List<EventTag> existingItems = context.EventTags
+                    .Where(et => et.EventId == eventId)
+                    .Where(et => et.TagId == tagId)
+                    .ToList();
+
+                if(existingItems.Count == 0)
+                {
+                    EventTag eventTag = new EventTag
+                    {
+                        EventId = eventId,
+                        TagId = tagId
+                    };
+                    context.EventTags.Add(eventTag);
+                    context.SaveChanges();
+                }
                 return Redirect("/Events/Detail/" + viewModel.EventId);
             }
 
             return View(viewModel);
+        }
+
+        public IActionResult Detail(int id)
+        {
+            List<EventTag> eventTags = context.EventTags
+                .Where(et => et.TagId == id)
+                .Include(et => et.Event)
+                .Include(et => et.Tag)
+                .ToList();
+
+            return View(eventTags);
         }
     }
 }
